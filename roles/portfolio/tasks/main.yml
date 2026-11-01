@@ -1,0 +1,36 @@
+---
+# tasks file for portfolio
+
+# Update APT cache
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+# Install Nginx
+- name: Install Nginx
+  apt:
+    name: "{{ nginx_package_name }}"
+    state: present
+
+# Start and enable Nginx
+- name: Ensure Nginx is active and enabled
+  service:
+    name: "{{ nginx_service_name }}"
+    state: started
+    enabled: yes
+
+# Deploy all portfolio website files
+- name: Copy portfolio website files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ web_destination_path }}/{{ item }}"
+    owner: root
+    group: root
+    mode: '0644'
+  loop:
+    - index.html
+    - about.html
+    - projects.html
+    - contact.html
+    - style.css
+
